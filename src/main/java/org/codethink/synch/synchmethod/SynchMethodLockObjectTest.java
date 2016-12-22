@@ -18,7 +18,7 @@ import org.junit.Test;
  */
 public class SynchMethodLockObjectTest {
 	
-	class SafeThreadClass{
+class Task{
 		
 		// synchronized关键字修饰的同步方法
 		synchronized public void synchMethod1(){
@@ -71,93 +71,93 @@ public class SynchMethodLockObjectTest {
 	
 	// 包含同步方法的线程类
 	class ThreadA extends Thread{
-		private SafeThreadClass safeThreadClass;
-		// 通过构造器注入UnsafeThreadClass对象
-		public ThreadA(SafeThreadClass safeThreadClass, String threadName) {
+		private Task task;
+		// 通过构造器注入Task对象
+		public ThreadA(Task task, String threadName) {
 			// TODO Auto-generated constructor stub
-			this.safeThreadClass = safeThreadClass;
+			this.task = task;
 			this.setName(threadName);
 		}
 		
 		// 业务操作方法
-		public void task(){
-			safeThreadClass.synchMethod1();
+		public void doTask(){
+			task.synchMethod1();
 		}
 		
 		// 重写run方法实现
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			task();
+			doTask();
 		}
 	}
 	
 	//包含同步方法的线程类
 	class ThreadB extends Thread{
-		private SafeThreadClass safeThreadClass;
-		// 通过构造器注入UnsafeThreadClass对象
-		public ThreadB(SafeThreadClass safeThreadClass, String threadName) {
+		private Task task;
+		// 通过构造器注入Task对象
+		public ThreadB(Task task, String threadName) {
 			// TODO Auto-generated constructor stub
-			this.safeThreadClass = safeThreadClass;
+			this.task = task;
 			this.setName(threadName);
 		}
 		
 		// 业务操作方法
-		public void task(){
-			safeThreadClass.synchMethod2();
+		public void doTask(){
+			task.synchMethod2();
 		}
 		
 		// 重写run方法实现
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			task();
+			doTask();
 		}
 	}
 	
 	// 仅包含非同步方法的线程类
 	class ThreadC extends Thread{
-		private SafeThreadClass safeThreadClass;
-		// 通过构造器注入UnsafeThreadClass对象
-		public ThreadC(SafeThreadClass safeThreadClass, String threadName) {
+		private Task task;
+		// 通过构造器注入Task对象
+		public ThreadC(Task task, String threadName) {
 			// TODO Auto-generated constructor stub
-			this.safeThreadClass = safeThreadClass;
+			this.task = task;
 			this.setName(threadName);
 		}
 		
 		// 业务操作方法
-		public void task(){
-			safeThreadClass.generalMethod1();
+		public void doTask(){
+			task.generalMethod1();
 		}
 		
 		// 重写run方法实现
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			task();
+			doTask();
 		}
 	}
 	
 	// 仅包含非同步方法的线程类
 	class ThreadD extends Thread{
-		private SafeThreadClass safeThreadClass;
-		// 通过构造器注入UnsafeThreadClass对象
-		public ThreadD(SafeThreadClass safeThreadClass, String threadName) {
+		private Task task;
+		// 通过构造器注入Task对象
+		public ThreadD(Task task, String threadName) {
 			// TODO Auto-generated constructor stub
-			this.safeThreadClass = safeThreadClass;
+			this.task = task;
 			this.setName(threadName);
 		}
 		
 		// 业务操作方法
-		public void task(){
-			safeThreadClass.generalMethod2();
+		public void doTask(){
+			task.generalMethod2();
 		}
 		
 		// 重写run方法实现
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			task();
+			doTask();
 		}
 	}
 	
@@ -165,11 +165,11 @@ public class SynchMethodLockObjectTest {
 	@Test
 	public void testSafeThread1(){
 		// 创建一个对象
-		SafeThreadClass safeThreadClass = new SafeThreadClass();
+		Task task = new Task();
 		// 两个线程注入同一个类的实例
-		ThreadA threadA = new ThreadA(safeThreadClass, "thread1");
+		ThreadA threadA = new ThreadA(task, "thread1");
 		threadA.start();
-		ThreadB threadB = new ThreadB(safeThreadClass, "thread2");
+		ThreadB threadB = new ThreadB(task, "thread2");
 		threadB.start();
 		
 		CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -185,11 +185,11 @@ public class SynchMethodLockObjectTest {
 	@Test
 	public void testSafeThread2(){
 		// 创建一个对象
-		SafeThreadClass safeThreadClass = new SafeThreadClass();
+		Task task = new Task();
 		// 两个线程注入两个实例
-		ThreadA threadA = new ThreadA(safeThreadClass, "thread1");
+		ThreadA threadA = new ThreadA(task, "thread1");
 		threadA.start();
-		ThreadC threadC = new ThreadC(safeThreadClass, "thread2");
+		ThreadC threadC = new ThreadC(task, "thread2");
 		threadC.start();
 		
 		CountDownLatch countDownLatch = new CountDownLatch(1);
@@ -205,12 +205,12 @@ public class SynchMethodLockObjectTest {
 	@Test
 	public void testSafeThread3(){
 		// 创建两个对象
-		SafeThreadClass safeThreadClass1 = new SafeThreadClass();
-		SafeThreadClass safeThreadClass2 = new SafeThreadClass();
+		Task task1 = new Task();
+		Task task2 = new Task();
 		// 两个线程注入两个实例
-		ThreadA threadA = new ThreadA(safeThreadClass1, "thread1");
+		ThreadA threadA = new ThreadA(task1, "thread1");
 		threadA.start();
-		ThreadB threadB = new ThreadB(safeThreadClass2, "thread2");
+		ThreadB threadB = new ThreadB(task2, "thread2");
 		threadB.start();
 		
 		CountDownLatch countDownLatch = new CountDownLatch(1);
